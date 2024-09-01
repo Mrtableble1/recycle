@@ -1,0 +1,16 @@
+import pgzrun
+
+HEIGHT = 1000
+WIDTH = 800
+
+TITLE = "What can be recycled"
+
+def draw():
+    screen.blit("earth",(0,0))
+
+
+
+
+
+
+pgzrun.go()
