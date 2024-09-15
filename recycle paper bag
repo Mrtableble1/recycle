@@ -14,22 +14,64 @@ clvl = 1
 
 garbage = ["bag","batteryimg","chipsimg","bottleimg"]
 
+animations = []
+
+gameover = False
+gamefinished = False
+
+
 def draw():
     screen.blit("earth",(0,0))
+    if gameover :
+        screen.draw.text("GAME OVER",(500,400))
+    elif gamefinished:
+        screen.draw.text("you win!",(500,400))
+        
+    else :
+        for actor in actors:
+            actor.draw()
+        screen.draw.text("LEVEL "+str(clvl),(10,750))
+
+
+def next_level():
+    global clvl,gamefinished
+    stop_animations()
+    clvl = clvl + 1
+    if clvl > total:
+        gamefinished = True
+    else:
+        screenactors()
+
+
+
+def on_mouse_down(pos):
     for actor in actors:
-        actor.draw()
+        if actor.collidepoint(pos):
+            if actor.image == "paperimg":
+                next_level()
+            else:
+                game_over()
 
-    screen.draw.text("LEVEL "+str(clvl),(10,750))
 
+def game_over():
+    global gameover
+    gameover = True
 
+def update():
+    pass
+
+def stop_animations():
+    global animations
+    for animation in animations:
+        if animation.running:
+            animation.stop()
 
 def screenactors():
-    global actors
+    global actors ,animations
     #selecting actors
-
+    actors.clear()
     images = ["paperimg"]
     for i in range(clvl):
-
         images.append(random.choice(garbage))
 
     #creating actors
@@ -45,6 +87,16 @@ def screenactors():
     for actor in actors:
         actor.pos = size*number,0
         number+=1
+
+    #animating the actors
+
+    for actor in actors:
+        actor.anchor = ("center","bottom")
+        animation = animate(actor,duration = 4, on_finished = game_over,y = 800)
+        animations.append(animation)
+
+        
+
 
 
         
